@@ -1,0 +1,150 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+main {
+  margin-bottom: 2rem;
+}
+
+.containerGrid {
+  /* first breakpoint*/
+  --w1: 1200px;
+  --n: 4;
+  /* second breakpoint*/
+  --w2: 900px;
+  --m: 3;
+  /* third breakpoint*/
+  --w3: 500px;
+  --p: 2;
+
+  width: 90%;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      clamp(
+        clamp(
+          clamp(
+            100%/ (var(--n) + 1) + 0.1%,
+            (var(--w1) - 100vw) * 1000,
+            100%/ (var(--m) + 1) + 0.1%
+          ),
+          (var(--w2) - 100vw) * 1000,
+          100%/ (var(--p) + 1) + 0.1%
+        ),
+        (var(--w3) - 100vw) * 1000,
+        100%
+      ),
+      1fr
+    )
+  );
+  gap: 2rem;
+}
+
+.card {
+  max-width: 37ch;
+  box-shadow: 0 1em 2em rgb(0 0 0 / 0.2);
+  transition: transform ease 250ms;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  min-height: 30rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card .data {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  transform: translateY(2rem);
+  transition: transform 0.3s;
+}
+
+.card:hover .data {
+  transform: translateY(-1.5rem);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  position: relative;
+  z-index: 1;
+  min-height: 12rem;
+  background-color: rgb(249, 249, 249);
+  box-shadow: 0 5px 30px 10px rgba(0, 0, 0, 0.3);
+}
+
+.cardImg img {
+  object-position: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.stock {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #ee1f1f;
+  color: #fff;
+  padding: 0.8rem 4rem;
+  padding-top: 5rem;
+  transform: translateX(-5.1rem) translateY(-3.9rem) rotate(-45deg);
+}
+
+.stockP {
+  margin: 0;
+}
+
+.title {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 1.2;
+  margin: 0;
+  margin-bottom: 1rem;
+  padding: 0;
+  color: #2f2f2f;
+}
+
+.title a {
+  color: #2f2f2f;
+}
+
+.price a{
+  font-size: 1.5rem;
+  color: #161616;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+  position: absolute;
+  bottom: 0;
+  left: -1rem;
+  width: 110%;
+  padding-bottom: 0.5rem;
+  background-color: rgb(249, 249, 249);
+  transform: translateY(20rem);
+  transition: transform 0s
+}
+
+.card:hover .botones {
+  transform: translateY(-0.4rem);
+  transition: transform 0s
+}
