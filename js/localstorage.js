@@ -1,125 +1,119 @@
-let items = []
-var guardado = []
-var array = []
-var toDisplayCarrito = []
-var totalprecio = 0
-var contador = 0
-var h1s = document.querySelector("#elh1")
-async function data(){
-    await fetch("https://petstore3.swagger.io/api/v3/pet/findByStatus?status=available")
-    .then(response => response.json())
-    .then(json => items.push(...json.map(item => ({
+/**
+ * Gestiona el carrito de compras utilizando localStorage.
+ */
+
+const items = [];
+let idsGuardados = [];
+let carritoParaMostrar = [];
+const badgeCarrito = document.querySelector('#elh1');
+
+async function obtenerItems() {
+  try {
+    const respuesta = await fetch(
+      'https://petstore3.swagger.io/api/v3/pet/findByStatus?status=available'
+    );
+    const datos = await respuesta.json();
+    items.push(
+      ...datos.map((item) => ({
         _id: item.id,
         nombre: item.name,
-        imagen: item.photoUrls?.[0] || "",
-        descripcion: item.status || item.category?.name || "",
+        imagen: item.photoUrls?.[0] || '',
+        descripcion: item.status || item.category?.name || '',
         precio: 0,
         stock: 0,
-        cantidad: 1
-    }))))
-
-
- init()
+        cantidad: 1,
+      }))
+    );
+    init();
+  } catch (error) {
+    console.error('Error al obtener artículos', error);
+  }
 }
-data()
-function init(){
 
-    var dataLocal = JSON.parse(localStorage.getItem('carrito'))
-        if(dataLocal !=null ){
-            guardado = dataLocal
-        }else{guardado=[]}
+function cargarIdsGuardados() {
+  return JSON.parse(localStorage.getItem('carrito')) || [];
+}
 
-        var badge = ""  
-        if(guardado.length >= 1){
-            
-            badge = `
-            <h1 id="elh1" class="elh1s" style="visibility: visible;">${guardado.length}</h1>
-            `
-            document.querySelector("#elh1").innerHTML = badge
-            
-    
-        }
-        else if(guardado.length == 0){
-                h1s.style.visibility = "hidden";
-                badge = `
-                <h1 id="elh1" class="elh1s" style="visibility: hidden;">${guardado.length}</h1>
-                `
-                document.querySelector("#elh1").innerHTML = badge
-    
-            }
-    toDisplayCarrito = []
-         
-    // console.log(items)
-    guardado.map(idguardado =>{
+function actualizarBadge() {
+  const cantidad = idsGuardados.length;
+  badgeCarrito.style.visibility = cantidad ? 'visible' : 'hidden';
+  badgeCarrito.textContent = cantidad ? cantidad : '';
+}
 
-    
+function construirCarrito() {
+  carritoParaMostrar = idsGuardados
+    .map((id) => items.find((item) => item._id === id))
+    .filter(Boolean);
+}
 
-    toDisplayCarrito.push(...items.filter(objetos => objetos._id == idguardado))
-    
-    })
-    var templateHTMLcarrito = "" 
-    
-    contador = 0
-    toDisplayCarrito.map(item => { 
-    totalprecio = item.cantidad * item.precio;
-    contador += totalprecio
-        templateHTMLcarrito += `    
+function renderizarCarrito() {
+  construirCarrito();
+  let total = 0;
+
+  const filas = carritoParaMostrar
+    .map((item) => {
+      const subtotal = item.cantidad * item.precio;
+      total += subtotal;
+      return `
         <tr>
-        <td> <img class="imagentabla" src="${item.imagen}" alt="Imagen tabla"></td>
-        <td class="textomover" >${item.nombre}</td>
-        <td class="textomover" >${item.cantidad}</td>
-        <td ><button class="mover botonmas" onClick="sumaritem('${item._id}')">+</button>
-        <button class="mover botonborrar" onClick="borrarallitems('${item._id}')">Borrar articulo</button>
-        <button class="mover botonmenos" onClick="restaitem('${item._id}')">-</button>
-        </td>
-        <td class="textomover">$${totalprecio}</td>
-      </tr>
-        `
-        
+          <td><img class="imagentabla" src="${item.imagen}" alt="Imagen tabla"></td>
+          <td class="textomover">${item.nombre}</td>
+          <td class="textomover">${item.cantidad}</td>
+          <td>
+            <button class="mover botonmas" onClick="sumarArticulo('${item._id}')">+</button>
+            <button class="mover botonborrar" onClick="eliminarArticulo('${item._id}')">Borrar articulo</button>
+            <button class="mover botonmenos" onClick="restarArticulo('${item._id}')">-</button>
+          </td>
+          <td class="textomover">$${subtotal}</td>
+        </tr>
+      `;
     })
-    document.querySelector('#bodytable').innerHTML = templateHTMLcarrito
-    document.querySelector("#totalcarrito").innerHTML = "$" + contador 
-    
+    .join('');
+
+  document.querySelector('#bodytable').innerHTML = filas;
+  document.querySelector('#totalcarrito').textContent = `$${total}`;
 }
 
-    init()
-    var counter = []
-    function borrarallitems(event){
+function init() {
+  idsGuardados = cargarIdsGuardados();
+  actualizarBadge();
+  renderizarCarrito();
+}
 
-        guardado = guardado.filter(idguardado => idguardado != event)
-        localStorage.setItem('carrito', JSON.stringify(guardado))
-        console.log(h1s.style.visibility)
-   
-        init()
-    }    
-    function sumaritem(event){
-        cantidad = []
-        var itempuntual = items.filter(items=>items._id == event)
-        cantidad.push(...toDisplayCarrito.filter(items =>items._id == event))
-        itempuntual.map(items => items.cantidad++)
-  
-        
-            init()    
+function eliminarArticulo(id) {
+  idsGuardados = idsGuardados.filter((itemId) => itemId !== id);
+  localStorage.setItem('carrito', JSON.stringify(idsGuardados));
+  init();
+}
+
+function sumarArticulo(id) {
+  const articulo = items.find((i) => i._id === id);
+  if (articulo) {
+    articulo.cantidad++;
+    init();
+  }
+}
+
+function restarArticulo(id) {
+  const articulo = items.find((i) => i._id === id);
+  if (articulo) {
+    articulo.cantidad--;
+    if (articulo.cantidad <= 0) {
+      eliminarArticulo(id);
+    } else {
+      init();
     }
-    function restaitem(event){
-        cantidad = []
-        var itempuntual = items.filter(items=>items._id == event)
-        cantidad.push(...toDisplayCarrito.filter(items =>items._id == event))
-        itempuntual.map(items => items.cantidad--)
-            itempuntual.forEach(item => {
-                if(item.cantidad == 0){
-                    borrarallitems(item._id)
-                }
-            })
-        init()    
+  }
 }
-function borrartodo(){
-        var borrado =[]
-        guardado=borrado
-        localStorage.setItem('carrito', JSON.stringify(guardado))
-        h1s.style.visibility = "hidden";
-init()
+
+function borrarTodo() {
+  idsGuardados = [];
+  localStorage.setItem('carrito', JSON.stringify(idsGuardados));
+  init();
 }
-function back(){
-    history.back();
+
+function back() {
+  history.back();
 }
+
+obtenerItems();
