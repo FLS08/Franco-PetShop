@@ -54,10 +54,11 @@ main {
   box-shadow: 0 1em 2em rgb(0 0 0 / 0.2);
   transition: transform ease 250ms;
   border-radius: 0.5rem;
-  background-color: #fff;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
   min-height: 30rem;
   position: relative;
   overflow: hidden;
+  will-change: transform;
 }
 
 .card:hover {
@@ -88,10 +89,9 @@ main {
   box-shadow: 0 5px 30px 10px rgba(0, 0, 0, 0.3);
 }
 
-.cardImg img {
-  object-position: center;
-  width: 100%;
-  margin-top: 1rem;
+/* Imagenes deshabilitadas para un estilo limpio sin medios */
+.cardImg {
+  display: none;
 }
 
 .stock {
