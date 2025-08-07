@@ -1,5 +1,4 @@
 var articulos = [];
-var imagenes = [];
 var juguetes = [];
 let toDisplay = [];
 let data = [];
@@ -14,7 +13,6 @@ async function getData() {
         ...json.map((item) => ({
           _id: item.id,
           nombre: item.name,
-          imagen: item.photoUrls?.[0] || "",
           descripcion: item.status || item.category?.name || "",
           precio: 0,
           stock: 0,
@@ -48,11 +46,6 @@ function updateDisplay(data) {
     templateHTML += `
       <div class="card">
         ${alerta}
-        <div class="cardImg">
-          <a href="./detalle.html?id=${item._id}">
-            <img src="${item.imagen}" alt="" />
-          </a>
-        </div>
         <div class="data">
           <div class="content">
             <p class="title">
@@ -83,10 +76,18 @@ function updateDisplay(data) {
         </div>
       </div>
 `;
-
-    // console.log(juguetes)
-    document.querySelector("#cartas").innerHTML = templateHTML;
   });
+
+  // Render the cards once and apply tilt effect
+  document.querySelector("#cartas").innerHTML = templateHTML;
+  if (window.VanillaTilt) {
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.2,
+    });
+  }
 }
 
 var favorites = JSON.parse(localStorage.getItem("favoritos")) || [];

@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/card.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <script defer src="../js/juguetes.js"></script>
     <script defer src="../js/localstorage.js"></script>
     <script
@@ -19,11 +20,6 @@
     <div id="cartas" class="containerGrid">
       <div class="card">
         ${alerta}
-        <div class="cardImg">
-          <a href="./detalle.html?id=${item._id}">
-            <img src="${item.imagen}" alt="" />
-          </a>
-        </div>
         <div class="data">
           <div class="content">
             <p class="title">${item.nombre}</p>
@@ -50,5 +46,13 @@
         </div>
       </div>
     </div>
+    <script>
+      VanillaTilt.init(document.querySelectorAll(".card"), {
+        max: 15,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2,
+      });
+    </script>
   </body>
 </html>
