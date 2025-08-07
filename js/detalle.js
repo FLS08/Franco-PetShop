@@ -1,74 +1,48 @@
-var articulos = []
-var url = window.location.search; 
-var id
-var seleccionado
-var botonComprar = document.querySelector("comprar")
+var articulos = [];
+var url = window.location.search;
+var seleccionado;
 
+async function getData() {
+  await fetch("https://jsonplaceholder.typicode.com/photos?_limit=20")
+    .then((response) => response.json())
+    .then((json) =>
+      articulos.push(
+        ...json.map((item) => ({
+          _id: item.id,
+          nombre: item.title,
+          imagen: item.url,
+          descripcion: item.title,
+          precio: (item.id % 100) + 20,
+          stock: 10,
+        }))
+      )
+    );
 
-async function getData(){
-    await fetch("https://petstore3.swagger.io/api/v3/pet/findByStatus?status=available")
-        .then(response => response.json())
-        .then(json => articulos.push(...json.map(item => ({
-            _id: item.id,
-            nombre: item.name,
-            imagen: item.photoUrls?.[0] || "",
-            descripcion: item.status || item.category?.name || "",
-            precio: 0,
-            stock: 0
-        }))))
-        console.log(articulos)
-         
-        url = url.split("?id=").splice(1);
-        var busqueda = articulos.filter(eventos=>eventos._id == url)
-        seleccionado = busqueda
-        console.log(url)
-        console.log(seleccionado)
-        
- 
-        
-        var imprimir = ""
-        seleccionado.forEach(seleccionado=>{
-        imprimir = ` 
-        <div class="tarjetadetalles"> 
-        <div class="imgyprecio">
-        <img class="imgtarjeta" src="${seleccionado.imagen}" alt="">
-        <h3 class="precio">$${seleccionado.precio}</h3>
-        </div>
-        <div class="detallesid">
-        <h2 class="nameid">${seleccionado.nombre}</h2>
-        <p class="descriptionid">${seleccionado.descripcion}</p>
-        
-        
-    </div>
-    
-    </div>
-        `           
-       })
-       
-            document.querySelector("#box").innerHTML = imprimir;
+  url = url.split("?id=").splice(1);
+  seleccionado = articulos.filter((eventos) => eventos._id == url);
+
+  var imprimir = "";
+  seleccionado.forEach((sel) => {
+    imprimir = `
+        <div class="tarjetadetalles">
+            <div class="imgyprecio">
+                <img class="imgtarjeta" src="${sel.imagen}" alt="${sel.nombre}">
+                <h3 class="precio">$${sel.precio}</h3>
+            </div>
+            <div class="detallesid">
+                <h2 class="nameid">${sel.nombre}</h2>
+                <p class="descriptionid">${sel.descripcion}</p>
+            </div>
+        </div>`;
+  });
+
+  document.querySelector("#box").innerHTML = imprimir;
 }
-getData()
-console.log(articulos)  
+getData();
 
-function stockcontrol(){
-    console.log("funcionando")
-    articulos.forEach(item=>{
-        if(item.stock >= 5){
-            console.log("quedan burda")
-        }
-        else{
-            console.log("quedan pocos")
-        }
-    })
-
+function compraDirecta() {
+  console.log("funciona");
 }
-stockcontrol()
-// function compradirecta(){
-//     console.log(funciona)
-// }
-function compraDirecta(){
-    console.log("funciona")
-}
-function añadirCarrito(){
-    console.log("añadir al carrito")
+function añadirCarrito() {
+  console.log("añadir al carrito");
 }
