@@ -3,7 +3,7 @@ var imagenes = []
 const modal = document.querySelector("#modal")
 
 async function getData(){ 
-    await fetch("https://apipetshop.herokuapp.com/api/articulos") 
+    await fetch("https://mindhub-xj03.onrender.com/api/petshop") 
         .then(response => response.json())
         .then(json => eventos.push(...json.response))
         console.log(eventos)       

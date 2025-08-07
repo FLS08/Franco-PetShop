@@ -7,7 +7,7 @@ var alerta = document.querySelector("#alerta");
 let buscador = document.querySelector("#buscar");
 buscador.addEventListener("keyup", search);
 async function getData() {
-  await fetch("https://apipetshop.herokuapp.com/api/articulos")
+  await fetch("https://mindhub-xj03.onrender.com/api/petshop")
     .then((response) => response.json())
     .then((json) => articulos.push(...json.response));
   juguetes.push(...articulos.filter((articulo) => articulo.tipo === "Juguete"));

@@ -6,7 +6,7 @@ var botonComprar = document.querySelector("comprar")
 
 
 async function getData(){ 
-    await fetch("https://apipetshop.herokuapp.com/api/articulos") 
+    await fetch("https://mindhub-xj03.onrender.com/api/petshop") 
         .then(response => response.json())
         .then(json => articulos.push(...json.response))
         console.log(articulos)

@@ -6,7 +6,7 @@ var totalprecio = 0
 var contador = 0
 var h1s = document.querySelector("#elh1")
 async function data(){ 
-    await fetch("https://apipetshop.herokuapp.com/api/articulos") 
+    await fetch("https://mindhub-xj03.onrender.com/api/petshop") 
     .then(response => response.json())
     .then(json => items.push(...json.response))
     items.map(items=>{
