@@ -42,7 +42,7 @@ function init(){
                 document.querySelector("#elh1").innerHTML = badge
     
             }
-    var toDisplayCarrito = []
+    toDisplayCarrito = []
          
     // console.log(items)
     guardado.map(idguardado =>{
@@ -60,7 +60,7 @@ function init(){
     contador += totalprecio
         templateHTMLcarrito += `    
         <tr>
-        <td> <img class"imagentabla" src="${item.imagen}" alt="Imagen tabla"></td>
+        <td> <img class="imagentabla" src="${item.imagen}" alt="Imagen tabla"></td>
         <td class="textomover" >${item.nombre}</td>
         <td class="textomover" >${item.cantidad}</td>
         <td ><button class="mover botonmas" onClick="sumaritem('${item._id}')">+</button>
