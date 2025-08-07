@@ -5,16 +5,21 @@ var toDisplayCarrito = []
 var totalprecio = 0
 var contador = 0
 var h1s = document.querySelector("#elh1")
-async function data(){ 
-    await fetch("https://apipetshop.herokuapp.com/api/articulos") 
+async function data(){
+    await fetch("https://petstore3.swagger.io/api/v3/pet/findByStatus?status=available")
     .then(response => response.json())
-    .then(json => items.push(...json.response))
-    items.map(items=>{
-        items.cantidad=1;
-    })
-    
-    
- init()      
+    .then(json => items.push(...json.map(item => ({
+        _id: item.id,
+        nombre: item.name,
+        imagen: item.photoUrls?.[0] || "",
+        descripcion: item.status || item.category?.name || "",
+        precio: 0,
+        stock: 0,
+        cantidad: 1
+    }))))
+
+
+ init()
 }
 data()
 function init(){

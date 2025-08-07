@@ -7,10 +7,21 @@ var alerta = document.querySelector("#alerta");
 let buscador = document.querySelector("#buscar");
 buscador.addEventListener("keyup", search);
 async function getData() {
-  await fetch("https://apipetshop.herokuapp.com/api/articulos")
+  await fetch("https://petstore3.swagger.io/api/v3/pet/findByStatus?status=available")
     .then((response) => response.json())
-    .then((json) => articulos.push(...json.response));
-  juguetes.push(...articulos.filter((articulo) => articulo.tipo === "Juguete"));
+    .then((json) =>
+      articulos.push(
+        ...json.map((item) => ({
+          _id: item.id,
+          nombre: item.name,
+          imagen: item.photoUrls?.[0] || "",
+          descripcion: item.status || item.category?.name || "",
+          precio: 0,
+          stock: 0,
+        }))
+      )
+    );
+  juguetes.push(...articulos);
 
   updateDisplay();
 }

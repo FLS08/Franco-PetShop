@@ -2,11 +2,18 @@
 var imagenes = []
 const modal = document.querySelector("#modal")
 
-async function getData(){ 
-    await fetch("https://apipetshop.herokuapp.com/api/articulos") 
+async function getData(){
+    await fetch("https://petstore3.swagger.io/api/v3/pet/findByStatus?status=available")
         .then(response => response.json())
-        .then(json => eventos.push(...json.response))
-        console.log(eventos)       
+        .then(json => eventos.push(...json.map(item => ({
+            _id: item.id,
+            nombre: item.name,
+            imagen: item.photoUrls?.[0] || "",
+            descripcion: item.status || item.category?.name || "",
+            precio: 0,
+            stock: 0
+        }))))
+        console.log(eventos)
 }
 getData()
 
