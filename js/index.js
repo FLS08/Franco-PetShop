@@ -8,7 +8,7 @@ async function getData(){
         .then(json => eventos.push(...json.map(item => ({
             _id: item.id,
             nombre: item.name,
-            imagen: item.photoUrls?.[0] || "",
+            imagen: 'https://cdn.pixabay.com/photo/2016/02/19/10/00/dog-1208816_1280.jpg',
             descripcion: item.status || item.category?.name || "",
             precio: 0,
             stock: 0
