@@ -17,7 +17,7 @@ async function obtenerItems() {
       ...datos.map((item) => ({
         _id: item.id,
         nombre: item.name,
-        imagen: item.photoUrls?.[0] || '',
+        imagen: item.photoUrls?.[0] || 'https://placekitten.com/200/200',
         descripcion: item.status || item.category?.name || '',
         precio: 0,
         stock: 0,
@@ -31,7 +31,7 @@ async function obtenerItems() {
 }
 
 function cargarIdsGuardados() {
-  return JSON.parse(localStorage.getItem('carrito')) || [];
+  return (JSON.parse(localStorage.getItem('carrito')) || []).map(Number);
 }
 
 function actualizarBadge() {
@@ -60,9 +60,9 @@ function renderizarCarrito() {
           <td class="textomover">${item.nombre}</td>
           <td class="textomover">${item.cantidad}</td>
           <td>
-            <button class="mover botonmas" onClick="sumarArticulo('${item._id}')">+</button>
-            <button class="mover botonborrar" onClick="eliminarArticulo('${item._id}')">Borrar articulo</button>
-            <button class="mover botonmenos" onClick="restarArticulo('${item._id}')">-</button>
+            <button class="mover botonmas" onClick="sumarArticulo(${item._id})">+</button>
+            <button class="mover botonborrar" onClick="eliminarArticulo(${item._id})">Borrar articulo</button>
+            <button class="mover botonmenos" onClick="restarArticulo(${item._id})">-</button>
           </td>
           <td class="textomover">$${subtotal}</td>
         </tr>

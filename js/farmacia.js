@@ -14,8 +14,8 @@ async function getData() {
         ...json.map((item) => ({
           _id: item.id,
           nombre: item.name,
-          imagen: item.photoUrls?.[0] || "",
-          descripcion: item.status || item.category?.name || "",
+          imagen: item.photoUrls?.[0] || 'https://placekitten.com/200/200',
+          descripcion: item.status || item.category?.name || '',
           precio: 0,
           stock: 0,
         }))
@@ -63,7 +63,7 @@ function updateDisplay(data) {
             </p>
             <div class="botones">
               <button
-                onClick="getID('${item._id}')"
+                onClick="getID(${item._id})"
                 id="${item._id}"
                 class="btn btn-primary enviar"
               >
@@ -71,7 +71,7 @@ function updateDisplay(data) {
               </button>
               <a href="./shop.html"
                 ><button
-                  onClick="getID('${item._id}')"
+                  onClick="getID(${item._id})"
                   id="${item._id}"
                   class="btn btn-primary enviar"
                 >
@@ -92,7 +92,7 @@ function updateDisplay(data) {
 var favorites = JSON.parse(localStorage.getItem("favoritos")) || [];
 
 function getID(event) {
-  favorites.push(event);
+  favorites.push(Number(event));
   const unicoFav = new Set(favorites);
   var clearFav = [...unicoFav];
 
